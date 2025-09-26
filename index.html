@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المُعبِّر الذكي</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #f0f8ff, #e6f7ff);
             margin: 0;
             padding: 0;
+            background: linear-gradient(to bottom, #f0f8ff, #e6f7ff);
         }
         header {
             background-color: #4a90e2;
@@ -29,6 +28,7 @@
             text-decoration: none;
             color: #333;
             font-weight: bold;
+            cursor: pointer;
         }
         nav a:hover {
             color: #4a90e2;
@@ -42,9 +42,6 @@
             color: white;
             text-align: center;
             padding: 15px 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
         }
         .btn-primary {
             background-color: #4a90e2;
@@ -58,6 +55,36 @@
         .btn-primary:hover {
             background-color: #357ab8;
         }
+        .jobs-list, .noor-info {
+            margin-top: 30px;
+            text-align: right;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .job-item {
+            background-color: #ffffffcc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        form {
+            margin-top: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: right;
+            background-color: #ffffffcc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
@@ -66,18 +93,88 @@
         <p>منصة وطنية ذكية للتوظيف وربط المواهب بالفرص</p>
     </header>
     <nav>
-        <a href="#home">الرئيسية</a>
-        <a href="#jobs">الوظائف</a>
-        <a href="#noor">عملة نور</a>
-        <a href="#contact">تواصل معنا</a>
+        <a onclick="showSection('home')">الرئيسية</a>
+        <a onclick="showSection('jobs')">الوظائف</a>
+        <a onclick="showSection('noor')">عملة نور</a>
+        <a onclick="showSection('register')">تسجيل</a>
     </nav>
     <main>
-        <h2>مرحبًا بك في المُعبِّر الذكي</h2>
-        <p>نحن نستخدم الذكاء الاصطناعي لمطابقة مهاراتك مع أفضل الفرص الوطنية.</p>
-        <button class="btn-primary">ابدأ الآن</button>
+        <section id="home">
+            <h2>مرحبًا بك في المُعبِّر الذكي</h2>
+            <p>نحن نستخدم الذكاء الاصطناعي لمطابقة مهاراتك مع أفضل الفرص الوطنية.</p>
+            <button class="btn-primary" onclick="showSection('jobs')">استعرض الوظائف</button>
+        </section>
+
+        <section id="jobs" style="display:none;">
+            <h2>قائمة الوظائف المتاحة</h2>
+            <div class="jobs-list" id="jobsList">
+                <!-- الوظائف ستظهر هنا -->
+            </div>
+        </section>
+
+        <section id="noor" style="display:none;">
+            <h2>عملة نور الرقمية</h2>
+            <div class="noor-info">
+                <p>عملتنا الرقمية "نور" تساعد في تبسيط المعاملات المالية والمكافآت داخل المنصة.</p>
+                <p>يمكنك اكتساب نور عند المشاركة بالوظائف أو تقديم خبراتك.</p>
+            </div>
+        </section>
+
+        <section id="register" style="display:none;">
+            <h2>تسجيل مستخدم جديد</h2>
+            <form id="registerForm">
+                <label for="name">الاسم الكامل:</label>
+                <input type="text" id="name" required>
+                <label for="email">البريد الإلكتروني:</label>
+                <input type="email" id="email" required>
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" required>
+                <button type="submit" class="btn-primary">تسجيل</button>
+            </form>
+        </section>
     </main>
     <footer>
         <p>© 2025 المُعبِّر الذكي. جميع الحقوق محفوظة.</p>
     </footer>
+
+    <script>
+        const sections = ['home', 'jobs', 'noor', 'register'];
+        function showSection(sectionId) {
+            sections.forEach(id => {
+                document.getElementById(id).style.display = (id === sectionId) ? 'block' : 'none';
+            });
+        }
+
+        // نموذج بيانات الوظائف
+        const jobsData = [
+            { title: "مهندس برمجيات", company: "الشركة الوطنية", location: "جدة" },
+            { title: "محلل بيانات", company: "وزارة التقنية", location: "الرياض" },
+            { title: "مصمم واجهات", company: "شركة الإبداع", location: "الدمام" }
+        ];
+
+        function displayJobs() {
+            const jobsList = document.getElementById('jobsList');
+            jobsList.innerHTML = '';
+            jobsData.forEach(job => {
+                const div = document.createElement('div');
+                div.className = 'job-item';
+                div.innerHTML = `<strong>${job.title}</strong><br>${job.company} - ${job.location}`;
+                jobsList.appendChild(div);
+            });
+        }
+
+        // عرض الوظائف عند الدخول إلى قسم الوظائف
+        document.querySelector('nav a[onclick*="jobs"]').addEventListener('click', displayJobs);
+
+        // التعامل مع نموذج التسجيل
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            alert(`تم تسجيل ${name} بنجاح!`);
+            this.reset();
+            showSection('home');
+        });
+    </script>
 </body>
 </html>
